@@ -14,8 +14,12 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await handleRegister(username, email, password);
-    navigate("/upload");
+    try {
+      await handleRegister(username, email, password);
+      navigate("/upload");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (loading) {

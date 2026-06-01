@@ -1,7 +1,100 @@
-﻿import React from "react";
+﻿import React, { useRef, useState } from "react";
 import "../style/style.scss";
+import { useResumeAnalyse } from "../hooks/useResumeAnalyse";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
+  const navigate = useNavigate();
+
+  const { loading, generateResume } = useResumeAnalyse();
+
+  const [jobDescription, setJobDescription] = useState("");
+  const [selfDescription, setSelfDescription] = useState("");
+  const resumeInputRef = useRef(null);
+
+  const handleGenerateReport = async () => {
+    const resumeFile = resumeInputRef.current.files[0];
+    const data = await generateResume({
+      jobDescription,
+      selfDescription,
+      resumeFile,
+    });
+
+    navigate(`/resume-analyse/${data._id}`);
+  };
+
+  if (loading) {
+    return (
+      <div className="upload-page">
+        <div
+          className="upload-container"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minHeight: "50vh",
+          }}
+        >
+          <div
+            className="loading-state"
+            style={{
+              textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <svg
+              style={{
+                width: "64px",
+                height: "64px",
+                animation: "spin 1s linear infinite",
+                color: "var(--purple)",
+                marginBottom: "20px",
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+                style={{ opacity: 0.25 }}
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
+            </svg>
+            <h2
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                marginBottom: "10px",
+              }}
+            >
+              Analyzing your Resume...
+            </h2>
+            <p style={{ color: "var(--gray)", fontSize: "1.1rem" }}>
+              Please wait while our AI models parse your documents.
+            </p>
+          </div>
+          <style>{`
+            @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+            }
+          `}</style>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="upload-page">
       <div className="upload-container">
@@ -16,6 +109,10 @@ const Upload = () => {
               </div>
               <div className="card-body">
                 <textarea
+                  value={jobDescription}
+                  onChange={(e) => {
+                    setJobDescription(e.target.value);
+                  }}
                   className="input-textarea auto-scroll"
                   placeholder="Paste the job posting you're targeting..."
                   rows="20"
@@ -43,6 +140,7 @@ const Upload = () => {
                 </div>
                 <div className="card-body">
                   <input
+                    ref={resumeInputRef}
                     type="file"
                     id="resume-upload"
                     className="file-hidden"
@@ -69,6 +167,10 @@ const Upload = () => {
                     <span>OR</span>
                   </div>
                   <textarea
+                    value={selfDescription}
+                    onChange={(e) => {
+                      setSelfDescription(e.target.value);
+                    }}
                     className="input-textarea compact auto-scroll"
                     placeholder="Paste self description..."
                     rows="4"
@@ -77,7 +179,7 @@ const Upload = () => {
               </div>
 
               {/* Submit Button */}
-              <button className="btn-submit">
+              <button onClick={handleGenerateReport} className="btn-submit">
                 <span className="btn-content">
                   <span className="btn-text">Analyze Now</span>
                   <span className="btn-sub">Get insights in seconds</span>

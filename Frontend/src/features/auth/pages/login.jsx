@@ -14,8 +14,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await handleLogin(email, password);
-    navigate("/upload");
+    try {
+      await handleLogin(email, password);
+      navigate("/upload");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   if (loading) {

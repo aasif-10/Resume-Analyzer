@@ -76,8 +76,15 @@ module.exports.generateResumeReport = async (
             description:
               "Required qualifications, certifications, or experiences not found in resume",
           },
+
+          matchedQualification: {
+            type: "array",
+            items: { type: "string" },
+            description:
+              "Matched qualification,certifications, or experiences found in the self description or the resume with respect to job description",
+          },
         },
-        required: ["missingQualification"],
+        required: ["missingQualification", "matchedQualification"],
       },
       projectRecommendation: {
         type: "object",
