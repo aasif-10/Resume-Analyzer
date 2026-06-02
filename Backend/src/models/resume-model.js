@@ -41,7 +41,13 @@ const resumeQualitySchema = mongoose.Schema(
 
 const qualificationSchema = mongoose.Schema(
   {
-    missingQualifications: [
+    missingQualification: [
+      {
+        type: String,
+        default: [],
+      },
+    ],
+    matchedQualification: [
       {
         type: String,
         default: [],
@@ -60,7 +66,7 @@ const projectSchema = mongoose.Schema(
       },
     ],
 
-    recommededProjects: [
+    recommendedProjects: [
       {
         type: String,
         default: [],

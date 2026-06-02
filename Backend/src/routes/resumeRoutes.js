@@ -7,6 +7,7 @@ const {
   resumeReportController,
 } = require("../controllers/resumeReportController");
 const resumeModel = require("../models/resume-model");
+const { generateResumePdf } = require("../services/ai");
 
 /**
  * @route POST /upload
@@ -20,7 +21,6 @@ router.post(
   upload.single("resume"),
   resumeReportController,
 );
-
 
 /**
  * @route GET /all
@@ -65,5 +65,52 @@ router.get("/:id", isLoggedIn, async (req, res) => {
   });
 });
 
+/**
+ *
+ */
+
+router.get("/modified/:id", isLoggedIn, async (req, res) => {
+  const resumeId = req.params.id;
+
+  const resume = await resumeModel.findById(resumeId);
+
+  if (!resume) {
+    return res.status(404).json({
+      message: "Resume not found",
+    });
+  }
+
+  const {
+    jobDescription,
+    selfDescription,
+    resumeContent,
+    matchScore,
+    skillGap,
+    resumeQualityRecommendation,
+    qualification,
+    projectRecommendation,
+  } = resume;
+
+  const resumeReport = {
+    "matchScore": matchScore,
+    "skillGap": skillGap,
+    "resumeQualityRecommendation": resumeQualityRecommendation,
+    "qualification": qualification,
+    "projectRecommendation": projectRecommendation,
+  };
+
+  const pdfBuffer = await generateResumePdf(
+    jobDescription,
+    selfDescription,
+    resumeContent,
+    resumeReport,
+  );
+
+  res.set({
+    "Content-Type": "application/pdf",
+    "Content-Disposition": `attachment; filename=modified_resume_${resumeId}.pdf`,
+  });
+  res.send(pdfBuffer);
+});
 
 module.exports = router;

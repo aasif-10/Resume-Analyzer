@@ -6,6 +6,7 @@ import Upload from "./features/resumeAnalyse/pages/Upload";
 import Analyse from "./features/resumeAnalyse/pages/Analyse";
 
 import React from "react";
+import Preview from "./features/resumeAnalyse/pages/Preview";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/auth/register" /> },
@@ -24,6 +25,14 @@ export const router = createBrowserRouter([
     element: (
       <Protected>
         <Analyse></Analyse>
+      </Protected>
+    ),
+  },
+  {
+    path: "/resume-preview/:id",
+    element: (
+      <Protected>
+        <Preview></Preview>
       </Protected>
     ),
   },

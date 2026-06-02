@@ -10,7 +10,14 @@ const Upload = () => {
 
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
+  const [fileName, setFileName] = useState("");
   const resumeInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFileName(e.target.files[0].name);
+    }
+  };
 
   const handleGenerateReport = async () => {
     const resumeFile = resumeInputRef.current.files[0];
@@ -145,6 +152,7 @@ const Upload = () => {
                     id="resume-upload"
                     className="file-hidden"
                     accept=".pdf,.doc,.docx"
+                    onChange={handleFileChange}
                   />
                   <label htmlFor="resume-upload" className="upload-zone">
                     <div className="upload-icon-box">
@@ -159,8 +167,8 @@ const Upload = () => {
                       </svg>
                     </div>
                     <div className="upload-text">
-                      <span className="upload-primary">Drop file or click</span>
-                      <span className="upload-secondary">PDF, DOC, DOCX</span>
+                      <span className="upload-primary">{fileName ? fileName : "Drop file or click"}</span>
+                      <span className="upload-secondary">{fileName ? "File selected" : "PDF, DOC, DOCX"}</span>
                     </div>
                   </label>
                   <div className="or-divider">

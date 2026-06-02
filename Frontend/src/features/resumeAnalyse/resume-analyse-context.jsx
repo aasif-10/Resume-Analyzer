@@ -8,6 +8,8 @@ export const ResumeAnalyseProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [resumeReport, setResumeReport] = useState(null);
   const [resumeReports, setResumeReports] = useState(null);
+  const [pdfUrl, setPdfUrl] = useState(null)
+  const [generatingPdf, setGeneratingPdf] = useState(false)
 
   return (
     <ResumeAnalyseContext.Provider
@@ -18,6 +20,10 @@ export const ResumeAnalyseProvider = ({ children }) => {
         setResumeReport,
         resumeReports,
         setResumeReports,
+        pdfUrl,
+        setPdfUrl,
+        generatingPdf,
+        setGeneratingPdf
       }}
     >
       {children}

@@ -49,3 +49,16 @@ export async function getResumeReports() {
     throw err;
   }
 }
+
+export async function getResumePdf(id) {
+  try {
+    const response = await api.get(`/resume/modified/${id}`, {
+      responseType: "blob",
+    });
+    const pdfUrl = URL.createObjectURL(response.data);
+    return pdfUrl
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}

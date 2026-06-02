@@ -1,5 +1,8 @@
 import { useContext } from "react";
-import { generateResumeReport } from "../services/resume-analyse-api";
+import {
+  generateResumeReport,
+  getResumePdf,
+} from "../services/resume-analyse-api";
 import { ResumeAnalyseContext } from "../resume-analyse-context";
 
 export const useResumeAnalyse = () => {
@@ -12,6 +15,10 @@ export const useResumeAnalyse = () => {
     setResumeReport,
     resumeReports,
     setResumeReports,
+    pdfUrl,
+    setPdfUrl,
+    generatingPdf,
+    setGeneratingPdf
   } = context;
 
   const generateResume = async ({
@@ -38,6 +45,34 @@ export const useResumeAnalyse = () => {
     return response.resumeReport;
   };
 
+  const generateResumePdf = async (id) => {
+    try {
+      setGeneratingPdf(true);
+      const response = await getResumePdf(id);
+      return response;
+    } catch (err) {
+      console.log(err);
+      throw err;
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
+  const getPdfUrl = async (id) => {
+    try {
+      setGeneratingPdf(true);
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+      const url = await getResumePdf(id);
+      setPdfUrl(url);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   return {
     loading,
     setLoading,
@@ -45,6 +80,12 @@ export const useResumeAnalyse = () => {
     setResumeReport,
     resumeReports,
     setResumeReports,
+    pdfUrl,
+    setPdfUrl,
+    generatingPdf,
+    setGeneratingPdf,
     generateResume,
+    generateResumePdf,
+    getPdfUrl
   };
 };

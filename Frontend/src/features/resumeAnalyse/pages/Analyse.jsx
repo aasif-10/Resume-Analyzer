@@ -17,6 +17,8 @@ const Analyse = () => {
     setLoading,
     resumeReports,
     setResumeReports,
+    getPdfUrl,
+    generatingPdf,
   } = useResumeAnalyse();
 
   useEffect(() => {
@@ -50,10 +52,33 @@ const Analyse = () => {
     );
   }
 
+  if (generatingPdf) {
+    return (
+      <div className="analysis-page generating-pdf-screen">
+        <div className="generating-card">
+          <div className="spinner-container">
+            <div className="spinner"></div>
+          </div>
+          <h2>Optimizing Resume</h2>
+          <p>Applying AI recommendations and formatting your new PDF...</p>
+        </div>
+      </div>
+    );
+  }
+
   const getScoreClass = (score) => {
     if (score >= 75) return "report-score score-high";
     if (score >= 50) return "report-score score-mid";
     return "report-score score-low";
+  };
+
+  const handleOptimize = async () => {
+    try {
+      await getPdfUrl(id);
+      navigate(`/resume-preview/${id}`);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -61,7 +86,6 @@ const Analyse = () => {
       {/* ── Recent Reports Sidebar ── */}
       <div className="reports-sidebar">
         <div className="sidebar-header">
-          <span className="sidebar-icon">📋</span>
           <span className="sidebar-title">Recent Reports</span>
         </div>
 
@@ -96,7 +120,6 @@ const Analyse = () => {
           )}
         </div>
       </div>
-
       {/* ── Main Content ── */}
       <div className="analysis-main">
         <div className="analysis-header">
@@ -190,20 +213,28 @@ const Analyse = () => {
               Qualifications Required
             </h2>
             <ul className="qualifications-list">
-              {resumeReport.qualification.missingQualification?.map((q, i) => (
-                <li key={i}>
-                  <span className="icon-cross">✗</span>
-                  <span>
-                    {q.name} {q.level && <span className="level">{q.level}</span>}
-                  </span>
-                </li>
-              ))}
-              {resumeReport.qualification.matchedQualification?.map((q, i) => (
-                <li key={i}>
-                  <span className="icon-check">✓</span>
-                  <span style={{ color: "#9ca3af" }}>{q.name}</span>
-                </li>
-              ))}
+              {resumeReport.qualification.missingQualification?.map((q, i) => {
+                const name = typeof q === 'string' ? q : q.name;
+                const level = typeof q === 'string' ? null : q.level;
+                return (
+                  <li key={i}>
+                    <span className="icon-cross">✗</span>
+                    <span>
+                      {name}{" "}
+                      {level && <span className="level">{level}</span>}
+                    </span>
+                  </li>
+                );
+              })}
+              {resumeReport.qualification.matchedQualification?.map((q, i) => {
+                const name = typeof q === 'string' ? q : q.name;
+                return (
+                  <li key={i}>
+                    <span className="icon-check">✓</span>
+                    <span style={{ color: "#9ca3af" }}>{name}</span>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
@@ -224,12 +255,16 @@ const Analyse = () => {
             </h2>
             <div className="projects-list">
               {resumeReport.projectRecommendation.recommendedProjects?.map(
-                (p, i) => (
-                  <div key={i} className="project-item">
-                    <h4>{p.title}</h4>
-                    <p>{p.why}</p>
-                  </div>
-                ),
+                (p, i) => {
+                  const title = typeof p === 'string' ? p : p.title;
+                  const why = typeof p === 'string' ? null : p.why;
+                  return (
+                    <div key={i} className="project-item">
+                      <h4>{title}</h4>
+                      {why && <p>{why}</p>}
+                    </div>
+                  );
+                }
               )}
             </div>
           </div>
@@ -295,10 +330,12 @@ const Analyse = () => {
         </div>
 
         <div className="analysis-actions">
-          <button className="btn-secondary">Export Report</button>
-          <button className="btn-primary">Optimize Resume Now</button>
+          <button onClick={handleOptimize} className="btn-primary">
+            Optimize Resume Now
+          </button>
         </div>
-      </div> {/* /analysis-main */}
+      </div>{" "}
+      {/* /analysis-main */}
     </div>
   );
 };
