@@ -21,12 +21,36 @@ router.post(
   resumeReportController,
 );
 
+
+/**
+ * @route GET /all
+ * @description Get all resumes for a user
+ * @access Private
+ */
+router.get("/all", isLoggedIn, async (req, res) => {
+  const userId = req.user._id;
+
+  const resumeReports = await resumeModel
+    .find({ user: userId })
+    .sort({ createdAt: -1 });
+
+  if (!resumeReports) {
+    return res.status(401).json({
+      message: "No resume found for user",
+    });
+  }
+
+  res.status(200).json({
+    resumeReports: resumeReports,
+  });
+});
+
 /**
  * @route GET /:id
  * @description Get a resume by ID
  * @access Private
  */
-router.get("/:id", async (req, res) => {
+router.get("/:id", isLoggedIn, async (req, res) => {
   const id = req.params.id;
   const resumeReport = await resumeModel.findById(id);
 
@@ -41,19 +65,5 @@ router.get("/:id", async (req, res) => {
   });
 });
 
-router.get("/all/:userId", async (req, res) => {
-  const userId = req.params.userId;
 
-  const resumeReports = await resumeModel.find({ user: userId });
-
-  if (!resumeReports) {
-    return res.status(401).json({
-      message: "No resume found for user",
-    });
-  }
-
-  res.status(200).json({
-    resumeReports: resumeReports,
-  });
-});
 module.exports = router;

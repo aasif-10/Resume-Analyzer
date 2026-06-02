@@ -5,10 +5,181 @@
     system-ui,
     sans-serif;
   background-color: #f4f4f4;
-  padding: 40px;
   color: #111;
   width: 100%;
-  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+// ==========================================
+// RECENT REPORTS SIDEBAR
+// ==========================================
+
+.reports-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 220px;
+  background: #faf8f3;
+  border-right: 3px solid #0f0f0f;
+  box-shadow: 4px 0 0 #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 14px;
+  border-bottom: 2px solid #0f0f0f;
+  background: #fff;
+  min-height: 56px;
+}
+
+.sidebar-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.sidebar-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #0f0f0f;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+
+
+.sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #e5e7eb;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #b794f6;
+    border-radius: 4px;
+  }
+}
+
+.sidebar-empty {
+  padding: 20px 0;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-report-item {
+  width: 100%;
+  background: #fff;
+  border: 2px solid #0f0f0f;
+  border-radius: 10px;
+  box-shadow: 3px 3px 0px #0f0f0f;
+  padding: 10px 12px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #fdfbf7;
+    box-shadow: 4px 4px 0px #b794f6;
+    border-color: #b794f6;
+    transform: translate(-1px, -1px);
+  }
+
+  &:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+  }
+
+  &.sidebar-item-active {
+    background: #0f0f0f;
+    color: #fff;
+    box-shadow: 3px 3px 0px #b794f6;
+
+    .sidebar-item-status,
+    .sidebar-item-title {
+      color: #d1d5db;
+    }
+
+    .sidebar-item-date {
+      color: #9ca3af;
+    }
+
+    .report-score {
+      color: #fff;
+    }
+  }
+}
+
+.sidebar-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  width: 100%;
+}
+.report-score {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+
+  &.score-high { color: #065f46; }
+  &.score-mid  { color: #92400e; }
+  &.score-low  { color: #991b1b; }
+}
+
+.sidebar-item-title {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-item-date {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+// ==========================================
+// MAIN CONTENT AREA
+// ==========================================
+
+.analysis-main {
+  flex: 1;
+  padding: 40px;
+  min-width: 0;
   box-sizing: border-box;
 }
 

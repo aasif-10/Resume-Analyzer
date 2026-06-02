@@ -66,21 +66,15 @@
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(
-        circle at 20% 30%,
+      radial-gradient(circle at 20% 30%,
         rgba(183, 148, 246, 0.1) 0%,
-        transparent 35%
-      ),
-      radial-gradient(
-        circle at 80% 60%,
+        transparent 35%),
+      radial-gradient(circle at 80% 60%,
         rgba(255, 155, 106, 0.1) 0%,
-        transparent 35%
-      ),
-      radial-gradient(
-        circle at 50% 80%,
+        transparent 35%),
+      radial-gradient(circle at 50% 80%,
         rgba(96, 165, 250, 0.08) 0%,
-        transparent 40%
-      );
+        transparent 40%);
     animation: bgShift 15s ease-in-out infinite alternate;
     pointer-events: none;
   }
@@ -90,6 +84,7 @@
   0% {
     transform: translate(0, 0) scale(1);
   }
+
   100% {
     transform: translate(20px, 20px) scale(1.05);
   }
@@ -226,10 +221,12 @@
 }
 
 @keyframes wiggle {
+
   0%,
   100% {
     transform: rotate(-1.5deg);
   }
+
   50% {
     transform: rotate(-2.5deg);
   }
@@ -266,6 +263,7 @@
 
   &.pill-purple {
     background: var(--purple-light);
+
     &:hover {
       background: var(--purple);
       color: var(--bg-white);
@@ -275,6 +273,7 @@
   &.pill-black {
     background: var(--black);
     color: var(--bg-white);
+
     &:hover {
       background: var(--gray);
     }
@@ -283,6 +282,7 @@
   &.pill-cream {
     background: var(--bg-cream);
     border: 2px solid var(--black);
+
     &:hover {
       background: var(--gray-light);
     }
@@ -313,9 +313,11 @@
   &:nth-child(1) {
     border-top: 4px solid var(--purple);
   }
+
   &:nth-child(2) {
     border-top: 4px solid var(--orange);
   }
+
   &:nth-child(3) {
     border-top: 4px solid var(--blue);
   }
@@ -381,10 +383,12 @@
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
@@ -399,10 +403,12 @@
 }
 
 @keyframes blink {
+
   0%,
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.3;
   }
@@ -560,9 +566,7 @@
 .list-styled {
   margin-bottom: 1.5rem;
   padding-left: 1.2rem;
-  color: var(
-    --black
-  ); // Changed from #e2e8f0 to contrast against white card background
+  color: var(--black); // Changed from #e2e8f0 to contrast against white card background
   line-height: 1.6;
   font-weight: 500;
 
@@ -744,12 +748,10 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent);
     transition: left 0.5s ease;
   }
 
@@ -944,6 +946,7 @@
 }
 
 @media (max-width: 480px) {
+
   .upload-left,
   .upload-right {
     padding: 28px 20px;
@@ -1099,10 +1102,8 @@
   width: 128px;
   height: 128px;
   border-radius: 50%;
-  background: conic-gradient(
-    var(--purple) 0% var(--score),
-    var(--gray-light) var(--score) 100%
-  );
+  background: conic-gradient(var(--purple) 0% var(--score),
+      var(--gray-light) var(--score) 100%);
   border: 3px solid var(--black);
   box-shadow: 4px 4px 0px var(--black);
   display: flex;
@@ -1168,10 +1169,12 @@
     background: #fef3c7;
     color: #92400e;
   }
+
   &.status-success {
     background: var(--mint-light);
     color: #065f46;
   }
+
   &.status-danger {
     background: #fee2e2;
     color: #991b1b;
@@ -1207,6 +1210,7 @@
   &.ats-stat-matched {
     border-top: 3px solid var(--mint);
   }
+
   &.ats-stat-missing {
     border-top: 3px solid var(--orange);
   }
@@ -1299,6 +1303,7 @@
     background: var(--mint-light);
     color: #065f46;
   }
+
   &.chip-missing {
     background: var(--orange-light);
     color: #9a3412;
@@ -1359,6 +1364,7 @@
     color: #991b1b;
     border: 1px solid #fca5a5;
   }
+
   &.priority-medium {
     background: #fef3c7;
     color: #92400e;

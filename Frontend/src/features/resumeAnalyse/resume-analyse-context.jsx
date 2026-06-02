@@ -7,6 +7,7 @@ export const ResumeAnalyseContext = createContext();
 export const ResumeAnalyseProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [resumeReport, setResumeReport] = useState(null);
+  const [resumeReports, setResumeReports] = useState(null);
 
   return (
     <ResumeAnalyseContext.Provider
@@ -15,6 +16,8 @@ export const ResumeAnalyseProvider = ({ children }) => {
         setLoading,
         resumeReport,
         setResumeReport,
+        resumeReports,
+        setResumeReports,
       }}
     >
       {children}

@@ -26,6 +26,11 @@ module.exports.generateResumeReport = async (
   const schema = {
     type: "object",
     properties: {
+      jobTitle: {
+        type: "string",
+        description:
+          "The specific job title extracted from the job description",
+      },
       matchScore: {
         type: "number",
         description:
@@ -106,6 +111,7 @@ module.exports.generateResumeReport = async (
       },
     },
     required: [
+      "jobTitle",
       "matchScore",
       "skillGap",
       "resumeQualityRecommendation",

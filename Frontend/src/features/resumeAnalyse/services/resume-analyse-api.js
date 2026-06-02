@@ -39,3 +39,13 @@ export async function getResumeById(resumeId) {
     throw err;
   }
 }
+
+export async function getResumeReports() {
+  try {
+    const response = await api.get(`/resume/all`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}

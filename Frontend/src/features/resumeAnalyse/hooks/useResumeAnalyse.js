@@ -5,7 +5,14 @@ import { ResumeAnalyseContext } from "../resume-analyse-context";
 export const useResumeAnalyse = () => {
   const context = useContext(ResumeAnalyseContext);
 
-  const { loading, setLoading, resumeReport, setResumeReport } = context;
+  const {
+    loading,
+    setLoading,
+    resumeReport,
+    setResumeReport,
+    resumeReports,
+    setResumeReports,
+  } = context;
 
   const generateResume = async ({
     jobDescription,
@@ -31,5 +38,13 @@ export const useResumeAnalyse = () => {
     return response.resumeReport;
   };
 
-  return { loading, setLoading, resumeReport, setResumeReport, generateResume };
+  return {
+    loading,
+    setLoading,
+    resumeReport,
+    setResumeReport,
+    resumeReports,
+    setResumeReports,
+    generateResume,
+  };
 };

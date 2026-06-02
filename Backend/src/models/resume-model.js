@@ -80,6 +80,9 @@ const resumeSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  jobTitle: {
+    type: String,
+  },
 
   resumeContent: {
     type: String,
@@ -99,6 +102,10 @@ const resumeSchema = mongoose.Schema({
   resumeQualityRecommendation: resumeQualitySchema,
   qualification: qualificationSchema,
   projectRecommendation: projectSchema,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("resume", resumeSchema);

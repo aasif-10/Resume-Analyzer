@@ -1,4 +1,4 @@
-﻿import React, { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import "../style/style.scss";
 import { useResumeAnalyse } from "../hooks/useResumeAnalyse";
 import { useNavigate } from "react-router-dom";
