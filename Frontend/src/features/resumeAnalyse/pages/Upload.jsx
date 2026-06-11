@@ -3,15 +3,64 @@ import "../style/style.scss";
 import { useResumeAnalyse } from "../hooks/useResumeAnalyse";
 import { useNavigate } from "react-router-dom";
 
+// ─── Icons ────────────────────────────────────────────────────────────────
+
+const IconDoc = () => (
+  <svg viewBox="0 0 24 24" fill="white" aria-hidden="true">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" fill="none" stroke="white" strokeWidth="1.5" />
+  </svg>
+);
+
+const IconUpload = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="17 8 12 3 7 8" />
+    <line x1="12" y1="3" x2="12" y2="15" />
+  </svg>
+);
+
+const IconCheck = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+);
+
+const IconArrow = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+);
+
+const IconInfo = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="12" />
+    <line x1="12" y1="16" x2="12.01" y2="16" />
+  </svg>
+);
+
+// ─── Component ───────────────────────────────────────────────────────────
+
 const Upload = () => {
   const navigate = useNavigate();
-
   const { loading, generateResume } = useResumeAnalyse();
 
   const [jobDescription, setJobDescription] = useState("");
-  const [selfDescription, setSelfDescription] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName]             = useState("");
   const resumeInputRef = useRef(null);
+
+  const hasJD    = jobDescription.trim().length > 0;
+  const hasFile  = Boolean(fileName);
+  const canSubmit = hasJD && hasFile;
+
+  const hintText = !hasJD && !hasFile
+    ? "Paste a job description and upload a PDF to continue"
+    : !hasJD
+    ? "Paste a job description to continue"
+    : !hasFile
+    ? "Upload your resume PDF to continue"
+    : "Ready to analyze";
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -20,193 +69,148 @@ const Upload = () => {
   };
 
   const handleGenerateReport = async () => {
+    if (!canSubmit) return;
     const resumeFile = resumeInputRef.current.files[0];
     const data = await generateResume({
       jobDescription,
-      selfDescription,
+      selfDescription: "",
       resumeFile,
     });
-
     navigate(`/resume-analyse/${data._id}`);
   };
 
+  // ── Loading ──────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="upload-page">
-        <div
-          className="upload-container"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "50vh",
-          }}
-        >
-          <div
-            className="loading-state"
-            style={{
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <svg
-              style={{
-                width: "64px",
-                height: "64px",
-                animation: "spin 1s linear infinite",
-                color: "var(--purple)",
-                marginBottom: "20px",
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                style={{ opacity: 0.25 }}
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            <h2
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                marginBottom: "10px",
-              }}
-            >
-              Analyzing your Resume...
-            </h2>
-            <p style={{ color: "var(--gray)", fontSize: "1.1rem" }}>
-              Please wait while our AI models parse your documents.
-            </p>
-          </div>
-          <style>{`
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
+      <div className="upload-loading">
+        <div className="loading-spinner" />
+        <div>
+          <h2>Analyzing your Resume</h2>
+          <p>Our AI is reviewing your documents. This takes just a moment.</p>
         </div>
       </div>
     );
   }
 
+  // ── Main ─────────────────────────────────────────────────────────────
   return (
     <div className="upload-page">
-      <div className="upload-container">
-        {/* Left Panel - Info Section with Job Description */}
-        <div className="upload-left">
-          <div className="left-content">
-            {/* Job Description Card */}
-            <div className="input-card card-accent-orange">
-              <div className="card-header">
-                <span className="card-number">01</span>
-                <label className="card-label">Job Description</label>
-              </div>
-              <div className="card-body">
-                <textarea
-                  value={jobDescription}
-                  onChange={(e) => {
-                    setJobDescription(e.target.value);
-                  }}
-                  className="input-textarea auto-scroll"
-                  placeholder="Paste the job posting you're targeting..."
-                  rows="20"
-                ></textarea>
-              </div>
-            </div>
+
+      {/* ── Top bar ─────────────────────────────────────────────────── */}
+      <header className="upload-topbar">
+        <div className="topbar-logo">
+          <div className="topbar-logo-icon">
+            <IconDoc />
           </div>
+          <span className="topbar-logo-name">ResumeAI</span>
         </div>
 
-        {/* Right Panel - Form */}
-        <div className="upload-right">
-          <div className="form-wrapper">
-            <h2 className="form-title">Upload Resume</h2>
-            <p className="form-subtitle">
-              Upload or paste your resume to begin
+
+      </header>
+
+      {/* ── Main content ────────────────────────────────────────────── */}
+      <main className="upload-main">
+
+        {/* Header row */}
+        <div className="upload-header">
+          <div className="upload-header-text">
+            <p className="upload-eyebrow">Resume Analysis</p>
+            <h1 className="upload-title">Upload your resume</h1>
+            <p className="upload-subtitle">
+              Both fields are required to generate your AI match report.
             </p>
+          </div>
 
-            {/* Form */}
-            <div className="upload-form">
-              {/* Resume Upload Card */}
-              <div className="input-card card-accent-purple">
-                <div className="card-header">
-                  <span className="card-number">02</span>
-                  <label className="card-label">Your Resume</label>
-                </div>
-                <div className="card-body">
-                  <input
-                    ref={resumeInputRef}
-                    type="file"
-                    id="resume-upload"
-                    className="file-hidden"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                  />
-                  <label htmlFor="resume-upload" className="upload-zone">
-                    <div className="upload-icon-box">
-                      <svg
-                        className="upload-svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                      >
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" />
-                      </svg>
-                    </div>
-                    <div className="upload-text">
-                      <span className="upload-primary">{fileName ? fileName : "Drop file or click"}</span>
-                      <span className="upload-secondary">{fileName ? "File selected" : "PDF, DOC, DOCX"}</span>
-                    </div>
-                  </label>
-                  <div className="or-divider">
-                    <span>OR</span>
-                  </div>
-                  <textarea
-                    value={selfDescription}
-                    onChange={(e) => {
-                      setSelfDescription(e.target.value);
-                    }}
-                    className="input-textarea compact auto-scroll"
-                    placeholder="Paste self description..."
-                    rows="4"
-                  ></textarea>
-                </div>
-              </div>
 
-              {/* Submit Button */}
-              <button onClick={handleGenerateReport} className="btn-submit">
-                <span className="btn-content">
-                  <span className="btn-text">Analyze Now</span>
-                  <span className="btn-sub">Get insights in seconds</span>
-                </span>
-                <div className="btn-icon">
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                  >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
+        </div>
+
+        {/* Two input cards */}
+        <div className="upload-cols">
+
+          {/* Card 1 — Job Description */}
+          <div className={`upload-card ${hasJD ? "card-filled" : ""}`}>
+            <div className="upload-card-header">
+              <label className="upload-card-title" htmlFor="jd-textarea">
+                Job Description
+              </label>
+            </div>
+            <div className="upload-card-body">
+              <textarea
+                id="jd-textarea"
+                className="jd-textarea"
+                value={jobDescription}
+                onChange={(e) => setJobDescription(e.target.value)}
+                placeholder="Paste the full job posting here — responsibilities, requirements, qualifications..."
+              />
+            </div>
+          </div>
+
+          {/* Card 2 — Resume PDF */}
+          <div className={`upload-card ${hasFile ? "card-filled" : ""}`}>
+            <div className="upload-card-header">
+              <span className="upload-card-title">Resume PDF</span>
+            </div>
+            <div className="upload-card-body">
+              <input
+                ref={resumeInputRef}
+                type="file"
+                id="resume-upload"
+                className="file-hidden"
+                accept=".pdf"
+                onChange={handleFileChange}
+              />
+              <label
+                htmlFor="resume-upload"
+                className={`upload-zone ${hasFile ? "zone-filled" : ""}`}
+              >
+                <div className="upload-zone-icon">
+                  {hasFile ? <IconCheck /> : <IconUpload />}
                 </div>
-              </button>
+
+                <div>
+                  <p className="upload-zone-primary">
+                    {hasFile ? fileName : "Drop your PDF here"}
+                  </p>
+                  <p className="upload-zone-secondary">
+                    {hasFile
+                      ? "Click to replace"
+                      : "or click to browse"}
+                  </p>
+                </div>
+
+                {!hasFile && (
+                  <span className="upload-zone-badge">
+                    PDF only
+                  </span>
+                )}
+              </label>
             </div>
           </div>
         </div>
-      </div>
+
+        {/* CTA bar */}
+        <div className="upload-cta-bar">
+          <p className={`upload-hint ${canSubmit ? "hint-ready" : ""}`}>
+            <IconInfo />
+            {hintText}
+          </p>
+
+          <button
+            className="btn-analyze"
+            onClick={handleGenerateReport}
+            disabled={!canSubmit}
+          >
+            <div className="btn-analyze-text">
+              <span>Analyze Now</span>
+              <span>Get your match report</span>
+            </div>
+            <div className="btn-arrow">
+              <IconArrow />
+            </div>
+          </button>
+        </div>
+
+      </main>
     </div>
   );
 };

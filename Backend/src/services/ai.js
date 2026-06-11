@@ -8,7 +8,9 @@ module.exports.generateResumeReport = async (
   selfDescription,
   resumeContent,
 ) => {
-  const prompt = `
+
+  try {
+    const prompt = `
     Analyze the following resume against the job description
     
     JOB DESCRIPTION:
@@ -24,122 +26,129 @@ module.exports.generateResumeReport = async (
     
   `;
 
-  const schema = {
-    type: "object",
-    properties: {
-      jobTitle: {
-        type: "string",
-        description:
-          "The specific job title extracted from the job description",
-      },
-      matchScore: {
-        type: "number",
-        description:
-          "Numerical score from 0-100 indicating how well the resume matches the job requirements",
-      },
-      skillGap: {
-        type: "object",
-        properties: {
-          missingSkills: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "List of skills required by the job that are missing from the resume",
-          },
-          matchedSkills: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "List of skills mentioned in the resume that match job requirements",
-          },
+    const schema = {
+      type: "object",
+      properties: {
+        jobTitle: {
+          type: "string",
+          description:
+            "The specific job title extracted from the job description",
         },
-        required: ["missingSkills", "matchedSkills"],
-      },
-      resumeQualityRecommendation: {
-        type: "object",
-        properties: {
-          missing: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Essential resume sections or elements that are completely missing",
-          },
-          improvement: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Specific suggestions to enhance existing resume sections",
-          },
+        matchScore: {
+          type: "number",
+          description:
+            "Numerical score from 0-100 indicating how well the resume matches the job requirements",
         },
-        required: ["missing", "improvement"],
-      },
-      qualification: {
-        type: "object",
-        properties: {
-          missingQualification: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Required qualifications, certifications, or experiences not found in resume",
+        skillGap: {
+          type: "object",
+          properties: {
+            missingSkills: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "List of skills required by the job that are missing from the resume",
+            },
+            matchedSkills: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "List of skills mentioned in the resume that match job requirements",
+            },
           },
-
-          matchedQualification: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Matched qualification,certifications, or experiences found in the self description or the resume with respect to job description",
-          },
+          required: ["missingSkills", "matchedSkills"],
         },
-        required: ["missingQualification", "matchedQualification"],
-      },
-      projectRecommendation: {
-        type: "object",
-        properties: {
-          missingProjects: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Types of projects or experiences that would strengthen the resume",
+        resumeQualityRecommendation: {
+          type: "object",
+          properties: {
+            missing: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Essential resume sections or elements that are completely missing",
+            },
+            improvement: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Specific suggestions to enhance existing resume sections",
+            },
           },
-          recommendedProjects: {
-            type: "array",
-            items: { type: "string" },
-            description:
-              "Specific project ideas or technologies the candidate should work with",
-          },
+          required: ["missing", "improvement"],
         },
-        required: ["missingProjects", "recommendedProjects"],
+        qualification: {
+          type: "object",
+          properties: {
+            missingQualification: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Required qualifications, certifications, or experiences not found in resume",
+            },
+
+            matchedQualification: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Matched qualification,certifications, or experiences found in the self description or the resume with respect to job description",
+            },
+          },
+          required: ["missingQualification", "matchedQualification"],
+        },
+        projectRecommendation: {
+          type: "object",
+          properties: {
+            missingProjects: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Types of projects or experiences that would strengthen the resume",
+            },
+            recommendedProjects: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Specific project ideas or technologies the candidate should work with",
+            },
+          },
+          required: ["missingProjects", "recommendedProjects"],
+        },
       },
-    },
-    required: [
-      "jobTitle",
-      "matchScore",
-      "skillGap",
-      "resumeQualityRecommendation",
-      "qualification",
-      "projectRecommendation",
-    ],
-  };
+      required: [
+        "jobTitle",
+        "matchScore",
+        "skillGap",
+        "resumeQualityRecommendation",
+        "qualification",
+        "projectRecommendation",
+      ],
+    };
 
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-  });
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.1-flash-lite",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: schema,
-    },
-  });
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-lite",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: schema,
+      },
+    });
 
-  const parsedResult = JSON.parse(response.text);
-  return parsedResult;
+    const parsedResult = JSON.parse(response.text);
+    return parsedResult;
+  } catch (err) {
+    console.error("Resume Report Generation Error:", err);
+    throw err;
+  }
 };
 
 const generatePdfFromHtml = async (htmlContent) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    headless: true,
+  });
   const page = await browser.newPage();
 
   await page.setContent(htmlContent, {
@@ -168,28 +177,30 @@ module.exports.generateResumePdf = async (
   resumeContent,
   resumeReport,
 ) => {
-  const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY,
-  });
 
-  const schema = {
-    type: "object",
-    properties: {
-      html: {
-        type: "string",
-        description: "Complete standalone HTML resume",
-      },
-      appliedChanges: {
-        type: "array",
-        items: {
+  try {
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+
+    const schema = {
+      type: "object",
+      properties: {
+        html: {
           type: "string",
+          description: "Complete standalone HTML resume",
+        },
+        appliedChanges: {
+          type: "array",
+          items: {
+            type: "string",
+          },
         },
       },
-    },
-    required: ["html", "appliedChanges"],
-  };
+      required: ["html", "appliedChanges"],
+    };
 
-  const prompt = `
+    const prompt = `
 You are an expert ATS Resume Writer and Career Consultant.
 
 Resume must be within 1 Page strictly
@@ -427,18 +438,22 @@ If any field is unavailable, omit it completely.
 Every section must contain real candidate information extracted from the provided inputs.
 `;
 
-  const response = await ai.models.generateContent({
-    model: "gemini-3.1-flash-lite",
-    contents: prompt,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: schema,
-    },
-  });
-  const jsonResult = JSON.parse(response.text.trim());
+    const response = await ai.models.generateContent({
+      model: "gemini-3.1-flash-lite",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: schema,
+      },
+    });
+    const jsonResult = JSON.parse(response.text.trim());
 
-  const htmlContent = jsonResult.html;
+    const htmlContent = jsonResult.html;
 
-  const pdfBuffer = await generatePdfFromHtml(htmlContent);
-  return pdfBuffer;
+    const pdfBuffer = await generatePdfFromHtml(htmlContent);
+    return pdfBuffer;
+  } catch (err) {
+    console.error("PDF Generation Error:", err);
+    throw err;
+  }
 };
