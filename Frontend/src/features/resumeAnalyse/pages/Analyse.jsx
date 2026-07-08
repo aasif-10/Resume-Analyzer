@@ -84,11 +84,16 @@ const Analyse = () => {
   useEffect(() => {
     const fetch = async () => {
       setLoading(true);
-      const response = await getResumeById(id);
-      const reports  = await getResumeReports();
-      setResumeReport(response.resumeReport);
-      setResumeReports(reports.resumeReports);
-      setLoading(false);
+      try {
+        const response = await getResumeById(id);
+        const reports  = await getResumeReports();
+        setResumeReport(response.resumeReport);
+        setResumeReports(reports.resumeReports);
+      } catch (err) {
+        console.error("Failed to load resume report:", err);
+      } finally {
+        setLoading(false);
+      }
     };
     fetch();
   }, [id, setResumeReport, setLoading, setResumeReports]);
