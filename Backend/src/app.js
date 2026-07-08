@@ -12,7 +12,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://resume-analyzer-lxz2.onrender.com"],
+    origin: [
+      "http://localhost:5173",
+      "https://resume-analyzer-two-lyart.vercel.app",
+    ],
     credentials: true,
   }),
 );
