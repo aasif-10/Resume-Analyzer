@@ -13,7 +13,11 @@ module.exports.logoutController = async (req, res) => {
     return res.status(400).json({ message: "No token provided" });
   }
 
-  res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "none",
+    secure: true,
+  });
 
   await tokenBlacklistModel.create({ token });
 
