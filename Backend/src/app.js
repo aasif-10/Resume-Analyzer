@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://resume-analyzer-lxz2.onrender.com"],
     credentials: true,
   }),
 );
@@ -26,7 +26,7 @@ const resumeModel = require("./models/resume-model");
 const authRoutes = require("../src/routes/authRoutes");
 const resumeRoutes = require("./routes/resumeRoutes");
 /* Use routes */
-app.use("/auth", authRoutes);
-app.use("/resume", resumeRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/resume", resumeRoutes);
 
 module.exports = app;

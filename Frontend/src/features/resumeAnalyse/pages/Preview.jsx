@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import "../style/analyse.scss";
 import "../style/preview.scss";
 import { useResumeAnalyse } from "../hooks/useResumeAnalyse";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 // ─── Icons ────────────────────────────────────────────────────────────────
 
@@ -25,6 +26,7 @@ const IconDownload = () => (
 const Preview = () => {
   const navigate = useNavigate();
   const { pdfUrl, getPdfUrl } = useResumeAnalyse();
+  const { handleLogout } = useAuth();
   const { id } = useParams();
 
   useEffect(() => {
@@ -65,6 +67,9 @@ const Preview = () => {
             <span>Back to Analysis</span>
           </button>
 
+          <button className="btn-secondary" onClick={() => navigate('/upload')}>
+            Upload Resume
+          </button>
           <a
             href={pdfUrl}
             download="optimized-resume.pdf"
@@ -73,6 +78,9 @@ const Preview = () => {
             <IconDownload />
             Download PDF
           </a>
+          <button className="btn-secondary" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </header>
 

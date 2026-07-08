@@ -6,6 +6,7 @@ import {
   getResumeById,
   getResumeReports,
 } from "../services/resume-analyse-api";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 // ─── Icons ────────────────────────────────────────────────────────────────
 
@@ -68,6 +69,7 @@ const getScoreClass = (score) => {
 const Analyse = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { handleLogout } = useAuth();
   const {
     resumeReport,
     setResumeReport,
@@ -191,10 +193,18 @@ const Analyse = () => {
               {resumeReport.jobTitle || "Resume Analysis"}
             </span>
           </div>
-          <button className="btn-optimize" onClick={handleOptimize}>
-            Optimize Resume
-            <IconArrow />
-          </button>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <button className="btn-secondary" onClick={() => navigate('/upload')}>
+              Upload Resume
+            </button>
+            <button className="btn-optimize" onClick={handleOptimize}>
+              Optimize Resume
+              <IconArrow />
+            </button>
+            <button className="btn-secondary" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Scrollable content */}

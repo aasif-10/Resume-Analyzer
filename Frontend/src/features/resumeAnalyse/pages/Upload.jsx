@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import "../style/style.scss";
 import { useResumeAnalyse } from "../hooks/useResumeAnalyse";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/hooks/useAuth";
 
 // ─── Icons ────────────────────────────────────────────────────────────────
 
@@ -45,22 +46,23 @@ const IconInfo = () => (
 const Upload = () => {
   const navigate = useNavigate();
   const { loading, generateResume } = useResumeAnalyse();
+  const { handleLogout } = useAuth();
 
   const [jobDescription, setJobDescription] = useState("");
-  const [fileName, setFileName]             = useState("");
+  const [fileName, setFileName] = useState("");
   const resumeInputRef = useRef(null);
 
-  const hasJD    = jobDescription.trim().length > 0;
-  const hasFile  = Boolean(fileName);
+  const hasJD = jobDescription.trim().length > 0;
+  const hasFile = Boolean(fileName);
   const canSubmit = hasJD && hasFile;
 
   const hintText = !hasJD && !hasFile
     ? "Paste a job description and upload a PDF to continue"
     : !hasJD
-    ? "Paste a job description to continue"
-    : !hasFile
-    ? "Upload your resume PDF to continue"
-    : "Ready to analyze";
+      ? "Paste a job description to continue"
+      : !hasFile
+        ? "Upload your resume PDF to continue"
+        : "Ready to analyze";
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -105,7 +107,14 @@ const Upload = () => {
           <span className="topbar-logo-name">ResumeAI</span>
         </div>
 
-
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button className="btn-secondary" onClick={() => navigate('/reports')}>
+            Reports
+          </button>
+          <button className="btn-secondary" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </header>
 
       {/* ── Main content ────────────────────────────────────────────── */}

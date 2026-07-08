@@ -7,6 +7,7 @@ import Analyse from "./features/resumeAnalyse/pages/Analyse";
 
 import React from "react";
 import Preview from "./features/resumeAnalyse/pages/Preview";
+import Reports from "./features/resumeAnalyse/pages/Reports";
 
 export const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/auth/register" /> },
@@ -33,6 +34,14 @@ export const router = createBrowserRouter([
     element: (
       <Protected>
         <Preview></Preview>
+      </Protected>
+    ),
+  },
+  {
+    path: "/reports",
+    element: (
+      <Protected>
+        <Reports></Reports>
       </Protected>
     ),
   },
