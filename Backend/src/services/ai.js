@@ -1,8 +1,7 @@
 require("dotenv").config();
 
 const { GoogleGenAI } = require("@google/genai");
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium");
+const puppeteer = require("puppeteer");
 
 module.exports.generateResumeReport = async (
   jobDescription,
@@ -146,13 +145,14 @@ module.exports.generateResumeReport = async (
 };
 
 const generatePdfFromHtml = async (htmlContent) => {
-  const executablePath = await chromium.executablePath();
-
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: executablePath,
-    headless: chromium.headless,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--disable-gpu",
+    ],
+    headless: true,
   });
   const page = await browser.newPage();
 
