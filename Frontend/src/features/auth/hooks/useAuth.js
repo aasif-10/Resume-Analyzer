@@ -4,16 +4,18 @@ import { AuthContext } from "../auth-context";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  const { user, setUser, loading, setLoading } = context;
+  const { user, setUser, loading, setLoading, error, setError } = context;
 
   const handleLogin = async (email, password) => {
     setLoading(true);
 
     try {
+      setError(null);
       const data = await login(email, password);
       setUser(data.user);
     } catch (err) {
       console.error(err);
+      setError(err.response?.data?.message || err.message || "Login failed");
       throw err;
     } finally {
       setLoading(false);
@@ -24,10 +26,12 @@ export const useAuth = () => {
     setLoading(true);
 
     try {
+      setError(null);
       const data = await register(username, email, password);
       setUser(data.user);
     } catch (err) {
       console.error(err);
+      setError(err.response?.data?.message || err.message || "Registration failed");
       throw err;
     } finally {
       setLoading(false);
@@ -48,5 +52,5 @@ export const useAuth = () => {
     }
   };
 
-  return { user, loading, handleLogin, handleLogout, handleRegister };
+  return { user, loading, error, handleLogin, handleLogout, handleRegister };
 };

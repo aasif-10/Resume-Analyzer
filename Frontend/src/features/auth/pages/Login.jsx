@@ -33,7 +33,7 @@ const IconDoc = () => (
 // ─── Component ────────────────────────────────────────────────────────────
 
 const Login = () => {
-  const { loading, handleLogin } = useAuth();
+  const { loading, handleLogin, error } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -151,6 +151,8 @@ const Login = () => {
                 />
               </div>
             </div>
+
+            {error && <p className="auth-error" style={{ color: "#ff4d4f", fontSize: "0.875rem", marginTop: "-10px", marginBottom: "15px", textAlign: "center" }}>{error}</p>}
 
             <button type="submit" className="submit-btn" disabled={loading}>
               {loading ? (
