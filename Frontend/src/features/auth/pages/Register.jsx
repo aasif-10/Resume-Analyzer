@@ -49,7 +49,7 @@ const features = [
 const Register = () => {
   const navigate = useNavigate();
 
-  const { loading, handleRegister, error } = useAuth();
+  const { loading, handleRegister, error, setError } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,20 +65,7 @@ const Register = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="auth-container">
-        <div className="auth-panel-right">
-          <div className="auth-card">
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Creating your account…</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="auth-container">
@@ -139,6 +126,7 @@ const Register = () => {
                   value={username}
                   onChange={(e) => {
                     setUsername(e.target.value);
+                    if (error) setError(null);
                   }}
                   type="text"
                   id="username"
@@ -164,6 +152,7 @@ const Register = () => {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    if (error) setError(null);
                   }}
                   type="email"
                   id="email"
@@ -189,6 +178,7 @@ const Register = () => {
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                    if (error) setError(null);
                   }}
                   type="password"
                   id="password"

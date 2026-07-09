@@ -33,7 +33,7 @@ const IconDoc = () => (
 // ─── Component ────────────────────────────────────────────────────────────
 
 const Login = () => {
-  const { loading, handleLogin, error } = useAuth();
+  const { loading, handleLogin, error, setError } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -50,20 +50,7 @@ const Login = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="auth-container">
-        <div className="auth-panel-right">
-          <div className="auth-card">
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Signing you in…</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="auth-container">
@@ -115,6 +102,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    if (error) setError(null);
                   }}
                   type="email"
                   id="email"
@@ -140,6 +128,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
+                    if (error) setError(null);
                   }}
                   type="password"
                   id="password"
