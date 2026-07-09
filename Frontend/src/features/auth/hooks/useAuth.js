@@ -1,13 +1,14 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { login, logout, register } from "../services/auth-api";
 import { AuthContext } from "../auth-context";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  const { user, setUser, loading, setLoading, error, setError } = context;
+  const { user, setUser, loading: contextLoading, error, setError } = context;
+  const [actionLoading, setActionLoading] = useState(false);
 
   const handleLogin = async (email, password) => {
-    setLoading(true);
+    setActionLoading(true);
 
     try {
       setError(null);
@@ -18,12 +19,12 @@ export const useAuth = () => {
       setError(err.response?.data?.message || err.message || "Login failed");
       throw err;
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
   const handleRegister = async (username, email, password) => {
-    setLoading(true);
+    setActionLoading(true);
 
     try {
       setError(null);
@@ -34,12 +35,12 @@ export const useAuth = () => {
       setError(err.response?.data?.message || err.message || "Registration failed");
       throw err;
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    setLoading(true);
+    setActionLoading(true);
 
     try {
       // eslint-disable-next-line no-unused-vars
@@ -48,9 +49,17 @@ export const useAuth = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      setActionLoading(false);
     }
   };
 
-  return { user, loading, error, setError, handleLogin, handleLogout, handleRegister };
+  return { 
+    user, 
+    loading: contextLoading || actionLoading, 
+    error, 
+    setError, 
+    handleLogin, 
+    handleLogout, 
+    handleRegister 
+  };
 };
