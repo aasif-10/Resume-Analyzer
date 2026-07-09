@@ -89,7 +89,7 @@ const Register = () => {
             <div className="auth-logo-icon">
               <IconDoc />
             </div>
-            <span className="auth-logo-name">ResumeAI</span>
+            <span className="auth-logo-name">ResumeLift</span>
           </div>
 
           <h2 className="auth-panel-headline">
@@ -97,7 +97,7 @@ const Register = () => {
             <em>interviews, faster.</em>
           </h2>
           <p className="auth-panel-sub">
-            Join thousands of job seekers who use ResumeAI to craft resumes
+            Join thousands of job seekers who use ResumeLift to craft resumes
             that actually get noticed.
           </p>
 

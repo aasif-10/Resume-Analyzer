@@ -104,7 +104,7 @@ const Upload = () => {
           <div className="topbar-logo-icon">
             <IconDoc />
           </div>
-          <span className="topbar-logo-name">ResumeAI</span>
+          <span className="topbar-logo-name">ResumeLift</span>
         </div>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>

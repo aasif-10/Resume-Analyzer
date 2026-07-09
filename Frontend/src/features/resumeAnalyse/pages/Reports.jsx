@@ -188,7 +188,7 @@ const Reports = () => {
           <div className="rp-topbar-icon">
             <IconDoc />
           </div>
-          <span className="rp-topbar-name">ResumeAI</span>
+          <span className="rp-topbar-name">ResumeLife</span>
         </div>
 
         <div className="rp-topbar-actions">

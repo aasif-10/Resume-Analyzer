@@ -74,7 +74,7 @@ const Login = () => {
             <div className="auth-logo-icon">
               <IconDoc />
             </div>
-            <span className="auth-logo-name">ResumeAI</span>
+            <span className="auth-logo-name">ResumeLift</span>
           </div>
 
           <h2 className="auth-panel-headline">
