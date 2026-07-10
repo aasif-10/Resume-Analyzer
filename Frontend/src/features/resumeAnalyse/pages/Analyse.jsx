@@ -364,9 +364,12 @@ const Analyse = () => {
                       const title = typeof p === "string" ? p : p.title;
                       const why   = typeof p === "string" ? null : p.why;
                       return (
-                        <div key={i} className="project-item">
-                          <h4>{title}</h4>
-                          {why && <p>{why}</p>}
+                        <div key={i} className="project-item" style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                          <span className="imp-dot dot-info" style={{ marginTop: '7px', flexShrink: 0 }} />
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <h4>{title}</h4>
+                            {why && <p>{why}</p>}
+                          </div>
                         </div>
                       );
                     })

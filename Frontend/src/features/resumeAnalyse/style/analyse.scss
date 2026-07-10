@@ -764,21 +764,6 @@
   &.imp-missing  { border-left: 2px solid var(--s-err-bd); }
   &.imp-improve  { border-left: 2px solid var(--c-border2); }
 
-  .imp-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    flex-shrink: 0;
-
-    &.dot-warn {
-      background: var(--s-err);
-    }
-
-    &.dot-info {
-      background: var(--t3);
-    }
-  }
-
   p {
     font-size: 0.82rem;
     font-weight: 600;
@@ -786,6 +771,21 @@
     line-height: 1.4;
     letter-spacing: -0.01em;
     margin: 0;
+  }
+}
+
+.imp-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.dot-warn {
+    background: var(--s-err);
+  }
+
+  &.dot-info {
+    background: var(--t3);
   }
 }
 
