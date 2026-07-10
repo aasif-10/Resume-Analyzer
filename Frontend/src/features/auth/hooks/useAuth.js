@@ -55,7 +55,8 @@ export const useAuth = () => {
 
   return { 
     user, 
-    loading: contextLoading || actionLoading, 
+    loading: actionLoading,
+    isInitializing: contextLoading,
     error, 
     setError, 
     handleLogin, 

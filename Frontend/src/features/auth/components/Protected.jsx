@@ -4,9 +4,9 @@ import { Navigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 const Protected = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, isInitializing } = useAuth();
 
-  if (loading) {
+  if (isInitializing) {
     return (
       <div style={{
         position: "fixed",
