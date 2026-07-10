@@ -392,12 +392,9 @@ const Analyse = () => {
                     <p style={{ fontSize: "0.8rem", color: "var(--t3)" }}>Nothing missing</p>
                   ) : (
                     missingSecs.map((item, i) => (
-                      <div key={i} className="imp-item imp-missing">
-                        <h4>
-                          <span className="imp-dot dot-warn" />
-                          {item.title || "Missing Element"}
-                        </h4>
-                        <p>{item.explanation || item}</p>
+                      <div key={i} className="imp-item imp-missing" style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                        <span className="imp-dot dot-warn" style={{ marginTop: '7px' }} />
+                        <p style={{ margin: 0 }}>{item.explanation || item}</p>
                       </div>
                     ))
                   )}
@@ -418,12 +415,9 @@ const Analyse = () => {
                     <p style={{ fontSize: "0.8rem", color: "var(--t3)" }}>No improvements needed</p>
                   ) : (
                     improvements.map((imp, i) => (
-                      <div key={i} className="imp-item imp-improve">
-                        <h4>
-                          <span className="imp-dot dot-info" />
-                          {imp.title || "Improvement"}
-                        </h4>
-                        <p>{imp.explanation || imp}</p>
+                      <div key={i} className="imp-item imp-improve" style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                        <span className="imp-dot dot-info" style={{ marginTop: '7px' }} />
+                        <p style={{ margin: 0 }}>{imp.explanation || imp}</p>
                       </div>
                     ))
                   )}
