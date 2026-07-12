@@ -49,11 +49,11 @@ const Upload = () => {
   const { handleLogout } = useAuth();
 
   const [jobDescription, setJobDescription] = useState("");
-  const [fileName, setFileName] = useState("");
+  const [resumeFile, setResumeFile] = useState(null);
   const resumeInputRef = useRef(null);
 
   const hasJD = jobDescription.trim().length > 0;
-  const hasFile = Boolean(fileName);
+  const hasFile = Boolean(resumeFile);
   const canSubmit = hasJD && hasFile;
 
   const hintText = !hasJD && !hasFile
@@ -66,20 +66,23 @@ const Upload = () => {
 
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setFileName(e.target.files[0].name);
+      setResumeFile(e.target.files[0]);
     }
   };
 
   const handleGenerateReport = async () => {
     if (!canSubmit) return;
-    const resumeFile = resumeInputRef.current.files[0];
-    const data = await generateResume({
-      jobDescription,
-      selfDescription: "",
-      resumeFile,
-    });
-    if (data && data._id) {
-      navigate(`/resume-analyse/${data._id}`);
+    try {
+      const data = await generateResume({
+        jobDescription,
+        selfDescription: "",
+        resumeFile,
+      });
+      if (data && data._id) {
+        navigate(`/resume-analyse/${data._id}`);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -187,7 +190,7 @@ const Upload = () => {
 
                 <div>
                   <p className="upload-zone-primary">
-                    {hasFile ? fileName : "Drop your PDF here"}
+                    {hasFile ? resumeFile.name : "Drop your PDF here"}
                   </p>
                   <p className="upload-zone-secondary">
                     {hasFile
