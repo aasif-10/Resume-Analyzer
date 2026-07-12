@@ -1,11 +1,14 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import {
   generateResumeReport,
   getResumePdf,
 } from "../services/resume-analyse-api";
 import { ResumeAnalyseContext } from "../resume-analyse-context";
+import axios from "axios";
 
 export const useResumeAnalyse = () => {
+
+  const abortControllerRef = useRef(null);
   const context = useContext(ResumeAnalyseContext);
 
   const {
@@ -27,30 +30,42 @@ export const useResumeAnalyse = () => {
     resumeFile,
   }) => {
     setLoading(true);
+
+    abortControllerRef.current = new AbortController()
     let response = null;
     try {
       response = await generateResumeReport({
         jobDescription,
         selfDescription,
         resumeFile,
+        signal: abortControllerRef.current.signal
       });
       setResumeReport(response.resumeReport);
     } catch (err) {
-      console.log(err);
-      throw err;
+      if (axios.isCancel(err)) {
+        console.log("Request cancelled")
+      } else {
+        console.log(err);
+        throw err;
+      }
     } finally {
       setLoading(false);
     }
 
-    return response.resumeReport;
+    return response?.resumeReport;
   };
 
   const generateResumePdf = async (id) => {
     try {
       setGeneratingPdf(true);
-      const response = await getResumePdf(id);
+      abortControllerRef.current = new AbortController();
+      const response = await getResumePdf(id, abortControllerRef.current.signal);
       return response;
     } catch (err) {
+      if (axios.isCancel(err)) {
+        console.log("PDF generation cancelled");
+        return null;
+      }
       console.log(err);
       throw err;
     } finally {
@@ -64,14 +79,25 @@ export const useResumeAnalyse = () => {
       if (pdfUrl) {
         URL.revokeObjectURL(pdfUrl);
       }
-      const url = await getResumePdf(id);
+      abortControllerRef.current = new AbortController();
+      const url = await getResumePdf(id, abortControllerRef.current.signal);
       setPdfUrl(url);
     } catch (err) {
-      console.log(err);
+      if (axios.isCancel(err)) {
+        console.log("PDF generation cancelled");
+      } else {
+        console.log(err);
+      }
     } finally {
       setGeneratingPdf(false);
     }
   };
+
+  const cancelGeneration = async () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort()
+    }
+  }
 
   return {
     loading,
@@ -86,6 +112,7 @@ export const useResumeAnalyse = () => {
     setGeneratingPdf,
     generateResume,
     generateResumePdf,
-    getPdfUrl
+    getPdfUrl,
+    cancelGeneration
   };
 };

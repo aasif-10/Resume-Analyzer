@@ -53,6 +53,12 @@ router.get("/all", isLoggedIn, async (req, res) => {
  * "modified" as the :id parameter.
  */
 router.get("/modified/:id", isLoggedIn, async (req, res) => {
+  let isCancelled = false;
+  req.on("close", () => {
+    console.log("Client cancelled PDF generation.");
+    isCancelled = true;
+  });
+
   const resumeId = req.params.id;
 
   const resume = await resumeModel.findById(resumeId);
@@ -82,12 +88,16 @@ router.get("/modified/:id", isLoggedIn, async (req, res) => {
     "projectRecommendation": projectRecommendation,
   };
 
+  if (isCancelled) return;
+
   const pdfBuffer = await generateResumePdf(
     jobDescription,
     selfDescription,
     resumeContent,
     resumeReport,
   );
+
+  if (isCancelled) return;
 
   res.set({
     "Content-Type": "application/pdf",

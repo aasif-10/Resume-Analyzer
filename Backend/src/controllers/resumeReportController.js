@@ -9,6 +9,12 @@ const resumeModel = require("../models/resume-model");
  */
 
 module.exports.resumeReportController = async (req, res) => {
+  let isCancelled = false;
+  req.on("close", () => {
+    console.log("Client cancelled the request.");
+    isCancelled = true;
+  });
+
   let resume = req.file;
   let { jobDescription, selfDescription } = req.body;
 
@@ -36,11 +42,15 @@ module.exports.resumeReportController = async (req, res) => {
     resumeContent = resumeContent.text;
   }
 
+  if (isCancelled) return;
+
   const result = await generateResumeReport(
     jobDescription,
     selfDescription,
     resumeContent,
   );
+
+  if (isCancelled) return;
 
   const resumeReport = await resumeModel.create({
     user: req.user._id,

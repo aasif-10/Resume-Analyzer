@@ -8,7 +8,7 @@ const api = axios.create({
 export async function generateResumeReport({
   jobDescription,
   selfDescription,
-  resumeFile,
+  resumeFile, signal
 }) {
   try {
     const formData = new FormData();
@@ -21,6 +21,7 @@ export async function generateResumeReport({
       headers: {
         "Content-Type": "multipart/form-data",
       },
+      signal
     });
 
     return response.data;
@@ -50,10 +51,11 @@ export async function getResumeReports() {
   }
 }
 
-export async function getResumePdf(id) {
+export async function getResumePdf(id, signal) {
   try {
     const response = await api.get(`/resume/modified/${id}`, {
       responseType: "blob",
+      signal
     });
     const pdfUrl = URL.createObjectURL(response.data);
     return pdfUrl
@@ -62,3 +64,5 @@ export async function getResumePdf(id) {
     throw err;
   }
 }
+
+

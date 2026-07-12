@@ -79,6 +79,7 @@ const Analyse = () => {
     setResumeReports,
     getPdfUrl,
     generatingPdf,
+    cancelGeneration,
   } = useResumeAnalyse();
 
   useEffect(() => {
@@ -125,6 +126,13 @@ const Analyse = () => {
           </div>
           <h2>Optimizing Resume</h2>
           <p>Applying AI recommendations and formatting your new PDF...</p>
+          <button 
+            className="btn-secondary" 
+            onClick={cancelGeneration} 
+            style={{ marginTop: '20px' }}
+          >
+            Cancel Optimization
+          </button>
         </div>
       </div>
     );

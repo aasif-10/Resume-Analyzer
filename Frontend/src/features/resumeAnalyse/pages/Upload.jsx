@@ -45,7 +45,7 @@ const IconInfo = () => (
 
 const Upload = () => {
   const navigate = useNavigate();
-  const { loading, generateResume } = useResumeAnalyse();
+  const { loading, generateResume, cancelGeneration } = useResumeAnalyse();
   const { handleLogout } = useAuth();
 
   const [jobDescription, setJobDescription] = useState("");
@@ -90,6 +90,13 @@ const Upload = () => {
           <h2>Analyzing your Resume</h2>
           <p>Our AI is reviewing your documents. This takes just a moment.</p>
         </div>
+        <button 
+          className="btn-secondary" 
+          onClick={cancelGeneration} 
+          style={{ marginTop: '20px' }}
+        >
+          Cancel Analysis
+        </button>
       </div>
     );
   }
