@@ -140,8 +140,10 @@ const Analyse = () => {
 
   const handleOptimize = async () => {
     try {
-      await getPdfUrl(id);
-      navigate(`/resume-preview/${id}`);
+      const url = await getPdfUrl(id);
+      if (url) {
+        navigate(`/resume-preview/${id}`);
+      }
     } catch (err) {
       console.error(err);
     }

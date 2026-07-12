@@ -82,12 +82,14 @@ export const useResumeAnalyse = () => {
       abortControllerRef.current = new AbortController();
       const url = await getResumePdf(id, abortControllerRef.current.signal);
       setPdfUrl(url);
+      return url;
     } catch (err) {
       if (axios.isCancel(err)) {
         console.log("PDF generation cancelled");
       } else {
         console.log(err);
       }
+      return null;
     } finally {
       setGeneratingPdf(false);
     }

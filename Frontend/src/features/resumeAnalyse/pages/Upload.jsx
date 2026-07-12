@@ -92,9 +92,9 @@ const Upload = () => {
           <h2>Analyzing your Resume</h2>
           <p>Our AI is reviewing your documents. This takes just a moment.</p>
         </div>
-        <button 
-          className="btn-secondary" 
-          onClick={cancelGeneration} 
+        <button
+          className="btn-secondary"
+          onClick={(e) => { e.preventDefault(); cancelGeneration(); }}
           style={{ marginTop: '20px' }}
         >
           Cancel Analysis
