@@ -78,7 +78,9 @@ const Upload = () => {
       selfDescription: "",
       resumeFile,
     });
-    navigate(`/resume-analyse/${data._id}`);
+    if (data && data._id) {
+      navigate(`/resume-analyse/${data._id}`);
+    }
   };
 
   // ── Loading ──────────────────────────────────────────────────────────
