@@ -103,4 +103,4 @@ npm run preview
 
 ## License
 
-This project is licensed under the [ISC License](../README.md#contributing--license).
+This project is licensed under the [ISC License](../LICENSE).

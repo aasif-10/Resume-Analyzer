@@ -132,4 +132,4 @@ docker run -p 3000:3000 \
 
 ## License
 
-This project is licensed under the [ISC License](../README.md#contributing--license).
+This project is licensed under the [ISC License](../LICENSE).
